@@ -9,6 +9,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Check if DOCKER_PASSWORD is set
+        run: |
+          if [ -z "${{ secrets.DOCKER_PASSWORD }}" ]; then
+            echo "DOCKER_PASSWORD is empty!"
+            exit 1
+          else
+            echo "DOCKER_PASSWORD is set."
+          fi
       #- run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - run: docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
       - run: docker build -t ramdrek/react-test -f Dockerfile.dev .
